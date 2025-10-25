@@ -1,0 +1,51 @@
+:root {
+	--max-w: 1440px;
+	/* alias for legacy container variable used in index.css */
+	--container-max: 1440px;
+	--accent: #6366f1;
+	--accent-2: #06b6d4;
+	--bg: #ffffff;
+	--bg-secondary: #f8fafc;
+	--text: #0f172a;
+	--text-secondary: #475569;
+	--border-color: #e6eef8;
+	--shadow-md: 0 6px 18px rgba(10, 15, 30, 0.06);
+	--shadow-lg: 0 12px 30px rgba(10, 15, 30, 0.08);
+}
+
+.container {
+	max-width: var(--max-w);
+	margin: 0 auto;
+	padding: 1rem;
+}
+
+/* Utility: center visually important cards */
+.center-card {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Respect user preference for reduced motion and provide a global opt-out */
+@media (prefers-reduced-motion: reduce) {
+	.animate-spin,
+	.animate-pulse,
+	.animate-bounce,
+	.animate-fade-in,
+	.animate-slide-up,
+	.animate-slide-down,
+	.animate-slide-left,
+	.animate-slide-right,
+	.demo-card,
+	.overlay-card,
+	.modal-backdrop {
+		animation: none !important;
+		transition: none !important;
+	}
+}
+
+/* Small utility to disable specific animations quickly */
+.no-animations * {
+	animation: none !important;
+	transition: none !important;
+}
+

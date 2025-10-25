@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>{% block title %}TicketApp{% endblock %}</title>
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/" class="brand">TicketApp</a>
+        <nav class="main-nav">
+          <a href="/auth/login">Login</a>
+          <a href="/auth/signup">Get Started</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">© {{ "now"|date("Y") }} TicketApp</div>
+    </footer>
+
+    <script src="/js/app.js"></script>
+  </body>
+</html>
