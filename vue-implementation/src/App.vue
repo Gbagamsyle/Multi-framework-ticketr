@@ -1,21 +1,49 @@
 <template>
-  <div>
-    <Header />
-    <main class="container">
-      <router-view />
-    </main>
-    <Footer />
-  </div>
+  <AuthProvider>
+    <TicketProvider>
+      <div id="app" class="app">
+        <Header />
+        <main>
+          <router-view v-slot="{ Component }">
+            <component :is="Component" />
+          </router-view>
+        </main>
+        <Footer />
+        <Toast />
+      </div>
+    </TicketProvider>
+  </AuthProvider>
 </template>
 
-<script>
-import Header from './components/Header.vue'
-import Footer from './components/Footer.vue'
-export default { components: { Header, Footer } }
+<script setup>
+import { onMounted } from 'vue';
+import Header from './components/Header.vue';
+import Footer from './components/Footer.vue';
+import Toast from './components/Toast.vue';
+import AuthProvider from './components/AuthProvider.vue';
+import TicketProvider from './components/TicketProvider.vue';
+
+onMounted(() => {
+  console.log('App mounted');
+});
 </script>
 
 <style>
-/* small reset to keep parity with React implementation */
-:root { --max-w: 1440px }
-.container { max-width: var(--max-w); margin: 0 auto; padding: 1.25rem }
+@import './styles/global.css';
+@import './styles/utils.css';
+@import './styles/components.css';
+@import './styles/animations.css';
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+main {
+  flex: 1;
+  width: 100%;
+  padding-top: var(--header-height);
+}
 </style>

@@ -1,15 +1,44 @@
-import Landing from './pages/Landing.vue'
-import Login from './pages/Auth/Login.vue'
-import Signup from './pages/Auth/Signup.vue'
-import Dashboard from './pages/Dashboard.vue'
-import Tickets from './pages/Tickets.vue'
+import { defineAsyncComponent } from 'vue'
+
+// Lazy load components
+const Landing = defineAsyncComponent(() => import('./pages/Landing.vue'))
+const Login = defineAsyncComponent(() => import('./pages/Auth/Login.vue'))
+const Signup = defineAsyncComponent(() => import('./pages/Auth/Signup.vue'))
+const Dashboard = defineAsyncComponent(() => import('./pages/Dashboard.vue'))
+const Tickets = defineAsyncComponent(() => import('./pages/Tickets.vue'))
 
 const routes = [
-  { path: '/', component: Landing },
-  { path: '/auth/login', component: Login },
-  { path: '/auth/signup', component: Signup },
-  { path: '/dashboard', component: Dashboard, meta: { auth: true } },
-  { path: '/tickets', component: Tickets, meta: { auth: true } }
+  { 
+    path: '/',
+    name: 'home',
+    component: Landing,
+  },
+  { 
+    path: '/auth/login',
+    name: 'login',
+    component: Login
+  },
+  { 
+    path: '/auth/signup',
+    name: 'signup',
+    component: Signup
+  },
+  { 
+    path: '/dashboard',
+    name: 'dashboard',
+    component: Dashboard,
+    meta: { auth: true }
+  },
+  { 
+    path: '/tickets',
+    name: 'tickets',
+    component: Tickets,
+    meta: { auth: true }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/'
+  }
 ]
 
 export default routes

@@ -1,0 +1,17 @@
+# Node modules
+**/node_modules/
+
+# Lock files
+**/package-lock.json
+**/yarn.lock
+
+# Vite build output
+**/dist/
+
+# Editor directories and files
+.vscode/
+*.log
+
+# System files
+.DS_Store
+Thumbs.db

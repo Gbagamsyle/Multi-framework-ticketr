@@ -1,7 +1,118 @@
-:root{--max-w:1440px}
-*{box-sizing:border-box}
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#0f172a;background:#f8fafc;margin:0}
-.container{max-width:var(--max-w);margin:0 auto;padding:1rem}
-.btn{padding:.5rem .75rem;border-radius:8px;border:1px solid transparent;cursor:pointer}
-.btn.primary{background:#6366f1;color:#fff}
-.btn.ghost{background:transparent}
+:root {
+  /* Colors */
+  --text: #0f172a;
+  --text-secondary: #374151;
+  --bg: #ffffff;
+  --bg-secondary: #f8fafc;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --border-color: rgba(0,0,0,0.05);
+  --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --color-error: #dc2626;
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  
+  /* Typography */
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Layout */
+  --container-max: 1440px;
+  --header-height: 64px;
+  --footer-height: 64px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  font-size: 16px;
+}
+
+body {
+  min-height: 100%;
+  color: var(--text);
+  background: var(--bg-secondary);
+}
+
+/* Links */
+a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent-hover); }
+
+/* Focus styles */
+:focus-visible { outline: 3px solid rgba(99,102,241,0.5); outline-offset: 2px; }
+
+/* Layout utilities */
+.container { width: 100%; max-width: var(--container-max); margin: 0 auto; padding: 0 1rem; }
+
+/* Common utilities (grid/flex/spacing/typography) are pulled in from React styles via imports */
+
+/* Animation keyframes copied from React global styles */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInDown { from { transform: translateY(-1rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes slideInUp { from { transform: translateY(1rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes slideInLeft { from { transform: translateX(-1rem); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slideInRight { from { transform: translateX(1rem); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
+@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-0.5rem); } }
+@keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-0.25rem); } 40% { transform: translateX(0.25rem); } 60% { transform: translateX(-0.25rem); } 80% { transform: translateX(0.25rem); } }
+
+/* Animation utility classes */
+.animate-fade-in { animation: fadeIn 0.3s ease-out; }
+.animate-slide-down { animation: slideInDown 0.3s ease-out; }
+.animate-slide-up { animation: slideInUp 0.3s ease-out; }
+.animate-slide-left { animation: slideInLeft 0.3s ease-out; }
+.animate-slide-right { animation: slideInRight 0.3s ease-out; }
+.animate-spin { animation: spin 1s linear infinite; }
+.animate-pulse { animation: pulse 2s ease-in-out infinite; }
+.animate-bounce { animation: bounce 1s ease-in-out infinite; }
+.animate-shake { animation: shake 0.5s ease-in-out; }
+
+
+/* Modal styles */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:50}
+.modal{background:var(--bg);border-radius:12px;max-width:720px;width:96%;box-shadow:var(--shadow-lg);overflow:hidden}
+.modal-body{padding:1rem}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;border-bottom:1px solid var(--border-color)}
+.modal-close{background:transparent;border:none;padding:.5rem;border-radius:6px;cursor:pointer}
+
+/* Utility: center visually important cards */
+.center-card {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Respect user preference for reduced motion and provide a global opt-out */
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin,
+  .animate-pulse,
+  .animate-bounce,
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-slide-down,
+  .animate-slide-left,
+  .animate-slide-right,
+  .demo-card,
+  .overlay-card,
+  .modal-backdrop {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Small utility to disable specific animations quickly */
+.no-animations * {
+  animation: none !important;
+  transition: none !important;
+}
