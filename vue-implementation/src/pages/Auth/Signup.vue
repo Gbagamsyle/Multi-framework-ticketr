@@ -24,13 +24,13 @@
 
 <script>
 import { signup } from '../../lib/api'
-import { pushToast } from '../../lib/toast'
+import { toast } from '../../lib/toast'
 export default {
   data(){ return { email:'', password:'' } },
   methods:{
     async handle(){
       try{ await signup({ email: this.email, password: this.password }); this.$router.push('/dashboard') }
-      catch(e){ pushToast({ msg: 'Failed to signup', type: 'error' }) }
+  catch(e){ toast('Failed to signup', 'error') }
     }
   }
 }
