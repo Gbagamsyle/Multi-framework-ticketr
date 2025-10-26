@@ -1,23 +1,29 @@
-# Use PHP with Apache
+# Use the official PHP 8.2 image with Apache
 FROM php:8.2-apache
 
+# Enable needed PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql
+
+# Copy project files into the container
+COPY . /var/www/html/
+
 # Set working directory
-WORKDIR /var/www/html
+WORKDIR /var/www/html/
 
-# Install unzip and other utilities
-RUN apt-get update && apt-get install -y unzip zip git libzip-dev && docker-php-ext-install zip
+# Install Composer and dependencies
+RUN curl -sS https://getcomposer.org/installer | php -- \
+    && mv composer.phar /usr/local/bin/composer \
+    && composer install --no-interaction --no-dev --optimize-autoloader
 
-# Copy composer from the Composer image
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Copy project files
-COPY . /var/www/html
-
-# Run composer install
-RUN composer install --no-interaction --no-dev --optimize-autoloader || true
-
-# Enable Apache mod_rewrite
+# Enable Apache rewrite module (needed for clean URLs)
 RUN a2enmod rewrite
+
+# Configure Apache
+RUN echo "<Directory /var/www/html>\n\
+    AllowOverride All\n\
+    Require all granted\n\
+</Directory>" > /etc/apache2/conf-available/app.conf \
+    && a2enconf app
 
 # Expose port 80
 EXPOSE 80
