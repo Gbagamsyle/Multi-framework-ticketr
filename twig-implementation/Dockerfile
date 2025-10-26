@@ -1,29 +1,40 @@
-# Use official PHP image
+# Use an official PHP + Apache base image
 FROM php:8.2-apache
 
-# Enable Apache mod_rewrite for pretty URLs
+# Install system dependencies and PHP extensions required by Twig and Composer
+RUN apt-get update && apt-get install -y \
+    unzip \
+    git \
+    libzip-dev \
+    libonig-dev \
+    && docker-php-ext-install zip mbstring
+
+# Enable Apache mod_rewrite (important for routing)
 RUN a2enmod rewrite
 
-# Install required system packages
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libzip-dev \
-    && docker-php-ext-install zip pdo pdo_mysql
-
-# Copy project files
+# Set working directory
 WORKDIR /var/www/html
+
+# Copy the application files into the container
 COPY . .
 
-# Install Composer manually
-RUN curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/composer
+# Install Composer globally
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
 
-# Install dependencies
+# Install PHP dependencies
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# Apache configuration
-RUN chown -R www-data:www-data /var/www/html
+# Configure Apache to use public directory as the web root
+RUN echo '<Directory /var/www/html/public>\n\
+    AllowOverride All\n\
+    Require all granted\n\
+</Directory>\n\
+\n\
+DocumentRoot /var/www/html/public\n' > /etc/apache2/sites-available/000-default.conf
 
+# Expose port 80
 EXPOSE 80
+
+# Start Apache server
 CMD ["apache2-foreground"]
