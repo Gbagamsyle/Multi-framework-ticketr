@@ -1,39 +1,32 @@
-# Use PHP 8.2 with Apache
+# Use official PHP image with Apache
 FROM php:8.2-apache
 
-# Install system dependencies for Composer and PHP extensions
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
-
-# Enable Apache mod_rewrite (for clean URLs)
+# Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Copy app files into container
+# Install dependencies and Composer
+RUN apt-get update && apt-get install -y unzip git curl \
+    && curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
+
+# Set working directory
 WORKDIR /var/www/html
+
+# Copy project files
 COPY . /var/www/html
-WORKDIR /var/www/html/public
-
-
-
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/composer
 
 # Install PHP dependencies
-RUN composer install --no-interaction --no-dev --optimize-autoloader || true
+RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# Configure Apache to allow .htaccess overrides
-RUN echo "<Directory /var/www/html>\n\
+# Set Apache DocumentRoot to /var/www/html/public
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+
+# Allow .htaccess overrides and permissions
+RUN echo '<Directory /var/www/html/public>\n\
     AllowOverride All\n\
     Require all granted\n\
-</Directory>" > /etc/apache2/conf-available/app.conf && \
-    a2enconf app
+</Directory>' > /etc/apache2/conf-available/public.conf \
+    && a2enconf public
 
-# Expose port 80
 EXPOSE 80
-
-# Start Apache server
 CMD ["apache2-foreground"]
