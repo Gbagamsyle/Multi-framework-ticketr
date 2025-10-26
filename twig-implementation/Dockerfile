@@ -14,6 +14,9 @@ RUN a2enmod rewrite
 # Copy app files into container
 WORKDIR /var/www/html
 COPY . /var/www/html
+WORKDIR /var/www/html/public
+
+
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php && \
