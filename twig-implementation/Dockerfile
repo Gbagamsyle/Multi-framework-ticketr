@@ -38,3 +38,4 @@ EXPOSE 80
 
 # Start Apache server
 CMD ["apache2-foreground"]
+
