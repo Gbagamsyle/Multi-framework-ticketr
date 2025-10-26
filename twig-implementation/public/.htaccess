@@ -1,0 +1,15 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# If the requested file or directory exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Otherwise, route everything to index.php
+RewriteRule ^ index.php [QSA,L]
+
+# Allow access to everything in this directory
+<Directory "/var/www/html">
+    AllowOverride All
+    Require all granted
+</Directory>
