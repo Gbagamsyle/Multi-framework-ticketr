@@ -3,7 +3,7 @@ services:
     name: twig-implementation
     env: php
     buildCommand: |
-      apt-get update && apt-get install -y unzip zip curl
+      apt-get update && apt-get install -y unzip zip curl git php-cli php-mbstring php-xml php-zip php-curl
       curl -sS https://getcomposer.org/installer | php
-      php composer.phar install --no-dev --optimize-autoloader
+      php composer.phar install --no-interaction --no-dev --optimize-autoloader
     startCommand: php -S 0.0.0.0:10000 -t public
