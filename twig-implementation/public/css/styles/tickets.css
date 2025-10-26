@@ -1,3 +1,4 @@
+/* Tickets styles (from react implementation) */
 .tickets-page, .ticket-page {
   padding: 2rem 1rem;
 }
@@ -146,69 +147,6 @@
   color: var(--text-secondary);
 }
 
-/* Global icon sizing for ticket area */
-.ticket-card .icon,
-.ticket-meta .icon,
-.ticket-badges .icon {
-  width: 1.1rem;
-  height: 1.1rem;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.action-icon {
-  width: 1.15rem;
-  height: 1.15rem;
-}
-
-.meta-icon {
-  opacity: 0.9;
-}
-
-.status-icon {
-  margin-right: 0.5rem;
-}
-
-.ticket-priority {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: rgba(0,0,0,0.03);
-}
-
-.ticket-badges {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  margin-top: 0.25rem;
-}
-
-.ticket-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-weight: 600;
-}
-
-.priority-high {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--color-error);
-}
-
-.priority-medium {
-  background: rgba(245, 158, 11, 0.1);
-  color: var(--color-warning);
-}
-
-.priority-low {
-  background: rgba(22, 163, 74, 0.1);
-  color: var(--color-success);
-}
-
 .ticket-content {
   color: var(--text-secondary);
   font-size: 0.95rem;
@@ -222,7 +160,6 @@
   height: 100%;
 }
 
-/* Truncate description to keep cards tidy */
 .ticket-content p {
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -245,7 +182,6 @@
   gap: 0.5rem;
 }
 
-/* Action buttons - larger hit target and clear affordance */
 .btn-icon {
   display: inline-flex;
   align-items: center;
@@ -275,30 +211,6 @@
   box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
 }
 
-/* Ensure SVG icons inside buttons don't overflow or overlap text */
-.btn .icon,
-.btn-icon .icon,
-.icon {
-  display: block; /* avoids inline spacing issues */
-  width: 1em;
-  height: 1em;
-  max-width: 100%;
-  max-height: 1.25rem;
-}
-
-/* If a button has both icon and text, use gap to separate — also add safe margin for older browsers */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.btn > .icon + *,
-.btn > * + .icon {
-  margin-left: 0.25rem;
-}
-
-/* Empty state */
 .empty-state {
   text-align: center;
   padding: 3rem 1rem;
@@ -313,20 +225,6 @@
   opacity: 0.5;
 }
 
-.empty-state h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: var(--text);
-}
-
-.empty-state p {
-  font-size: 0.875rem;
-  max-width: 20rem;
-  margin: 0 auto;
-}
-
-/* Ticket form card styles */
 .ticket-form-card {
   max-width: 720px; /* narrower, more focused form */
   width: 100%;
@@ -346,12 +244,6 @@
   padding: 0.75rem 1rem;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
-}
-
-.ticket-form-header h3 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
 }
 
 .ticket-form {
@@ -392,7 +284,6 @@
   border-color: transparent;
 }
 
-/* small responsive tweak */
 @media (max-width: 640px) {
   .ticket-form-card { padding: 0; }
   .ticket-form { padding: 0.75rem; }

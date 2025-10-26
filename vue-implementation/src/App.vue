@@ -1,7 +1,7 @@
 <template>
   <AuthProvider>
     <TicketProvider>
-      <div id="app" class="app">
+      <div id="app" class="app" data-debug="true">
         <Header />
         <main>
           <router-view v-slot="{ Component }">
@@ -10,6 +10,12 @@
         </main>
         <Footer />
         <Toast />
+        <!-- Simple debug overlay: shows current route info when router is available -->
+        <div class="debug-overlay" v-if="$route">
+          <strong>DEBUG</strong>
+          <div>route: {{ $route.name || $route.path }}</div>
+          <div>fullPath: {{ $route.fullPath }}</div>
+        </div>
       </div>
     </TicketProvider>
   </AuthProvider>

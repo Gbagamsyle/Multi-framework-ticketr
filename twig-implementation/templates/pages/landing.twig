@@ -1,0 +1,208 @@
+{% extends "base.twig" %}
+
+{% block title %}Welcome to TicketApp{% endblock %}
+
+{% block content %}
+<main class="landing-page">
+    <section class="hero">
+        <div class="hero-circle circle-1" aria-hidden="true">
+            <svg width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Decorative circle">
+                <defs>
+                    <radialGradient id="c1" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" style="stop-color:var(--hero-left);stop-opacity:var(--hero-circle-inner-opacity)" />
+                        <stop offset="100%" style="stop-color:var(--hero-right);stop-opacity:var(--hero-circle-outer-opacity)" />
+                    </radialGradient>
+                </defs>
+                <circle cx="100" cy="100" r="100" fill="url(#c1)" />
+            </svg>
+        </div>
+        <div class="hero-circle circle-2" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Decorative circle">
+                    <defs>
+                        <radialGradient id="c2" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" style="stop-color:var(--hero-left);stop-opacity:var(--hero-circle-inner-opacity)" />
+                            <stop offset="100%" style="stop-color:var(--hero-right);stop-opacity:var(--hero-circle-outer-opacity)" />
+                        </radialGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="100" fill="url(#c2)" />
+                </svg>
+        </div>
+    <div class="container hero-inner">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Manage support tickets with clarity and ease
+            </h1>
+            <p class="hero-sub">
+                Create, track, and resolve support tickets efficiently with our modern and accessible ticketing system.
+            </p>
+            <div class="hero-ctas">
+                <a href="/auth/signup" class="btn btn-primary" aria-label="Create an account - Get started">
+                    Get started for free
+                </a>
+                <a href="/auth/login" class="btn btn-secondary" aria-label="Sign in to dashboard">
+                    Sign in to dashboard
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-graphic" aria-hidden="false">
+            <div class="demo-card-container animate-slide-up">
+                <div class="demo-card card card-lg">
+                    <div class="demo-header">
+                        <div class="demo-browser-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="demo-preview">
+                        <div class="demo-sidebar">
+                            <div class="demo-nav-item active"></div>
+                            <div class="demo-nav-item"></div>
+                            <div class="demo-nav-item"></div>
+                        </div>
+                        <div class="demo-content">
+                            <div class="demo-stats">
+                                <div class="stat-card">
+                                    <div class="stat-icon success"></div>
+                                    <div class="stat-content">
+                                        <div class="stat-label"></div>
+                                        <div class="stat-value"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon warning"></div>
+                                    <div class="stat-content">
+                                        <div class="stat-label"></div>
+                                        <div class="stat-value"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="demo-table">
+                                <div class="table-row"></div>
+                                <div class="table-row"></div>
+                                <div class="table-row"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- overlay demo credentials -->
+                    <div class="demo-credentials" role="region" aria-label="Demo credentials">
+                        <div class="card-header">
+                            <div class="card-title">Demo Credentials</div>
+                        </div>
+                        <div class="card-body">
+                            <p class="credential-item">Email</p>
+                            <div class="credential-value" data-value="test@example.com" onclick="copyToClipboard(this)">
+                                <code>test@example.com</code>
+                                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </div>
+                            <p class="credential-item">Password</p>
+                            <div class="credential-value" data-value="Password123!" onclick="copyToClipboard(this)">
+                                <code>Password123!</code>
+                                <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                    function copyToClipboard(element) {
+                        const value = element.getAttribute('data-value');
+                        navigator.clipboard.writeText(value).then(() => {
+                            // Remove any existing feedback
+                            const existingFeedback = element.querySelector('.copied-feedback');
+                            if (existingFeedback) {
+                                existingFeedback.remove();
+                            }
+                            
+                            // Add feedback element
+                            const feedback = document.createElement('span');
+                            feedback.className = 'copied-feedback';
+                            feedback.textContent = 'Copied!';
+                            element.appendChild(feedback);
+                            
+                            // Remove feedback after animation
+                            setTimeout(() => {
+                                feedback.remove();
+                            }, 1500);
+                        });
+                    }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="hero-wave" aria-hidden="true">
+                <!-- inline hero wave (shared) -->
+                <svg width="1440" height="220" viewBox="0 0 1440 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" role="img" aria-label="Decorative wave background">
+                                <defs>
+                                    <linearGradient id="g-wave" x1="0" x2="1">
+                                        <stop offset="0%" style="stop-color:var(--hero-left);stop-opacity:var(--hero-wave-left-opacity)" />
+                                        <stop offset="100%" style="stop-color:var(--hero-right);stop-opacity:var(--hero-wave-right-opacity)" />
+                                    </linearGradient>
+                                </defs>
+                    <path d="M0,60 C240,140 480,0 720,60 C960,120 1200,40 1440,100 L1440,220 L0,220 Z" fill="url(#g-wave)"/>
+                </svg>
+        </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <div class="section-header reveal-on-scroll">
+            <h2 class="gradient-text">Everything you need to manage tickets</h2>
+            <p class="section-subtitle">Streamline your support process with powerful yet simple tools</p>
+        </div>
+
+        <div class="feature-grid reveal-on-scroll">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                    </svg>
+                </div>
+                <h3>Quick Setup</h3>
+                <p>Get started in minutes with an intuitive onboarding process and helpful guides</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
+                <h3>Smart Workflow</h3>
+                <p>Track ticket status, priority, and progress with visual indicators and filters</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </div>
+                <h3>Built for Everyone</h3>
+                <p>Accessible by design with keyboard navigation, screen readers, and high contrast</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to get started?</h2>
+            <p>Join thousands of teams already managing their support tickets more efficiently.</p>
+            <a href="/auth/signup" class="btn-primary">Create your account</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

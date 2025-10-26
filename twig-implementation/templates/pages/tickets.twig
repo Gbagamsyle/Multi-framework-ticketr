@@ -1,0 +1,210 @@
+{% extends "base.twig" %}
+
+{% block title %}Tickets - TicketApp{% endblock %}
+
+{% block content %}
+<div class="tickets-page">
+    <div class="tickets-container">
+        <div class="tickets-header">
+            <h1>Tickets</h1>
+            <button class="btn primary" onclick="showTicketForm()">
+                <svg class="icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+                Create New Ticket
+            </button>
+        </div>
+
+        {% if error %}
+            <div class="error-banner" role="alert">{{ error }}</div>
+        {% endif %}
+
+        <div class="ticket-list">
+        {% for ticket in tickets %}
+            <article class="card ticket-card" role="article" aria-labelledby="ticket-{{ ticket.id }}">
+                <div class="ticket-side status-{{ ticket.status }}" aria-hidden="true"></div>
+
+                <div class="ticket-main">
+                    <header class="ticket-header">
+                        <div class="ticket-title-section">
+                            <h3 id="ticket-{{ ticket.id }}" class="ticket-title"><a href="/tickets/{{ ticket.id }}">{{ ticket.title }}</a></h3>
+
+                            <div class="ticket-badges">
+                                <span class="ticket-status status-{{ ticket.status }}">{{ ticket.status|title }}</span>
+                                {% if ticket.priority %}
+                                    <span class="ticket-priority">{{ ticket.priority|title }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="ticket-actions">
+                            <a href="/tickets/{{ ticket.id }}" class="btn-icon" title="View ticket">View</a>
+                        </div>
+                    </header>
+
+                    <div class="ticket-content">
+                        {% if ticket.description %}
+                            <p>{{ ticket.description }}</p>
+                        {% else %}
+                            <p class="text-secondary"><em>No description provided</em></p>
+                        {% endif %}
+                    </div>
+
+                    <footer class="ticket-footer">
+                        <div class="ticket-meta">
+                            <span class="meta-item">#{{ ticket.id }}</span>
+                            <span class="meta-item">{{ ticket.created_at }}</span>
+                        </div>
+                    </footer>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+
+    <!-- New Ticket Modal -->
+    <div id="ticketModal" class="modal-backdrop" role="dialog" aria-modal="true">
+        <div class="modal" role="document">
+            <div class="modal-header">
+                <h2 class="modal-title">Create New Ticket</h2>
+                <button type="button" class="modal-close" onclick="hideTicketForm()" aria-label="Close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/tickets" class="ticket-form" id="newTicketForm">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input 
+                            type="text" 
+                            id="title" 
+                            name="title" 
+                            class="form-control" 
+                            required 
+                            placeholder="Brief description of the issue"
+                            maxlength="100"
+                            autocomplete="off"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea 
+                            id="description" 
+                            name="description" 
+                            class="form-control" 
+                            required 
+                            placeholder="Detailed explanation of the issue"
+                            rows="4"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priority">Priority Level</label>
+                        <select id="priority" name="priority" class="form-control">
+                            <option value="low">Low Priority</option>
+                            <option value="medium" selected>Medium Priority</option>
+                            <option value="high">High Priority</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="hideTicketForm()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="submitTicket">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Create Ticket
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('ticketModal');
+    const form = document.getElementById('newTicketForm');
+    const submitBtn = document.getElementById('submitTicket');
+    
+    function showTicketForm() {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+            modal.querySelector('input[name="title"]').focus();
+        }, 100);
+    }
+
+    function hideTicketForm() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        form.reset();
+    }
+
+    // Close modal on backdrop click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            hideTicketForm();
+        }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            hideTicketForm();
+        }
+    });
+
+    // Handle form validation and submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const title = this.querySelector('#title').value.trim();
+        const description = this.querySelector('#description').value.trim();
+        
+        if (!title || !description) {
+            showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        // Show loading state
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+
+        // Submit the form
+        fetch('/tickets', {
+            method: 'POST',
+            body: new FormData(this),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            showToast('Ticket created successfully', 'success');
+            hideTicketForm();
+            window.location.reload();
+        })
+        .catch(error => {
+            showToast(error.message || 'Failed to create ticket', 'error');
+        })
+        .finally(() => {
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
+        });
+    });
+
+    // Expose functions to global scope for onclick handlers
+    window.showTicketForm = showTicketForm;
+    window.hideTicketForm = hideTicketForm;
+});
+</script>
+{% endblock %}

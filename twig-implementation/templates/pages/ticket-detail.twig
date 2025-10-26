@@ -1,0 +1,32 @@
+{% extends "base.twig" %}
+
+{% block title %}Ticket #{{ ticket.id }} - TicketApp{% endblock %}
+
+{% block content %}
+<div class="ticket-detail-container">
+    <div class="ticket-header">
+        <h1>{{ ticket.title }}</h1>
+        <span class="ticket-status status-{{ ticket.status }}">{{ ticket.status|title }}</span>
+    </div>
+
+    <div class="ticket-info">
+        <p class="ticket-meta">
+            <span>Ticket #{{ ticket.id }}</span>
+            <span>Created on {{ ticket.created_at }}</span>
+        </p>
+
+        <div class="ticket-description">
+            {{ ticket.description }}
+        </div>
+    </div>
+
+    <div class="ticket-actions">
+        <button class="btn btn-secondary" onclick="history.back()">Back to Tickets</button>
+        {% if ticket.status == 'open' %}
+            <form method="POST" action="/tickets/{{ ticket.id }}/close" style="display: inline;">
+                <button type="submit" class="btn btn-primary">Close Ticket</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
