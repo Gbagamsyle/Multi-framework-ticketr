@@ -7,7 +7,8 @@ WORKDIR /var/www/html
 # Install required system packages
 RUN apt-get update && apt-get install -y \
     git unzip libicu-dev libzip-dev zip \
-    && docker-php-ext-install intl pdo pdo_sqlite zip
+    && docker-php-ext-install intl pdo pdo_sqlite zip \
+    && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache rewrite module
 RUN a2enmod rewrite
