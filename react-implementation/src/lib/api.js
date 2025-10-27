@@ -1,54 +1,71 @@
 import { v4 as uuidv4 } from 'uuid'
-
+import { findUserByEmail, createUser } from './users'
 
 const SESSION_KEY = 'ticketapp_session'
 const TICKETS_KEY = 'ticketapp_tickets'
 
-
-function delay(ms = 300){
-return new Promise(res => setTimeout(res, ms))
+function delay(ms = 300) {
+  return new Promise(res => setTimeout(res, ms))
 }
 
-
-function readSession(){
-try{ 
-    return JSON.parse(localStorage.getItem(SESSION_KEY)) 
-}catch(e){ 
+function readSession() {
+  try {
+    return JSON.parse(localStorage.getItem(SESSION_KEY))
+  } catch(e) {
     console.warn('Failed to parse session:', e.message)
-    return null 
-}
-}
-function requireAuthOrThrow(){
-const s = readSession()
-if(!s || s.expiresAt < Date.now()){
-localStorage.removeItem(SESSION_KEY)
-const err = new Error('Unauthorized')
-err.code = 401
-throw err
-}
-return s
+    return null
+  }
 }
 
-
-export async function login({ email, password }){
-await delay(500)
-if(email === 'test@example.com' && password === 'Password123!'){
-const token = Math.random().toString(36).slice(2)
-const expiresAt = Date.now() + 1000 * 60 * 60
-const session = { token, username: email, expiresAt }
-localStorage.setItem(SESSION_KEY, JSON.stringify(session))
-return session
-}
-const err = new Error('Invalid credentials')
-err.code = 400
-throw err
+function requireAuthOrThrow() {
+  const s = readSession()
+  if(!s || s.expiresAt < Date.now()) {
+    localStorage.removeItem(SESSION_KEY)
+    const err = new Error('Unauthorized')
+    err.code = 401
+    throw err
+  }
+  return s
 }
 
+export async function login({ email, password }) {
+  await delay(500)
+  
+  const user = findUserByEmail(email)
+  if (!user || user.password !== password) {
+    const err = new Error('Invalid credentials')
+    err.code = 400
+    throw err
+  }
 
-export async function signup({ email, password }){
-await delay(700)
-// For demo simply accept
-return login({ email, password })
+  const token = Math.random().toString(36).slice(2)
+  const expiresAt = Date.now() + 1000 * 60 * 60 // 1 hour
+  const session = { 
+    token,
+    userId: user.id,
+    username: user.name || user.email,
+    email: user.email,
+    expiresAt
+  }
+  
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+  return session
+}
+
+export async function signup({ email, password, name }) {
+  await delay(700)
+  
+  try {
+    const user = createUser({ email, password, name })
+    return login({ email, password })
+  } catch(err) {
+    if (err.code === 409) {
+      const error = new Error('Email already exists')
+      error.code = 409
+      throw error
+    }
+    throw err
+  }
 }
 
 

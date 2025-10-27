@@ -50,12 +50,15 @@ export default function Login() {
 
     setIsLoading(true);
     try {
-      await login({ email, password });
-      pushToast({ msg: 'Welcome back! Login successful', type: 'success' });
+      const result = await login({ email, password });
+      pushToast({ msg: `Welcome back, ${result.username}!`, type: 'success' });
       navigate(from, { replace: true });
-    } catch {
-      pushToast({ msg: 'Invalid email or password', type: 'error' });
-      setErrors({ form: 'Invalid email or password' });
+    } catch (err) {
+      const message = err.code === 400 
+        ? 'Invalid email or password' 
+        : 'Failed to sign in. Please try again.';
+      pushToast({ msg: message, type: 'error' });
+      setErrors({ form: message });
     } finally {
       setIsLoading(false);
     }

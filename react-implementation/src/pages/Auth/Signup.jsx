@@ -25,6 +25,7 @@ const Spinner = () => (
 
 export default function Signup() {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -36,6 +37,7 @@ export default function Signup() {
     const errors = {};
     if (!email) errors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(email)) errors.email = 'Please enter a valid email';
+    if (!name) errors.name = 'Name is required';
     if (!password) errors.password = 'Password is required';
     else if (password.length < 8) errors.password = 'Password must be at least 8 characters';
     if (!confirmPassword) errors.confirmPassword = 'Please confirm your password';
@@ -51,11 +53,11 @@ export default function Signup() {
 
     setIsLoading(true);
     try {
-      await signup({ email, password });
+      await signup({ email, password, name });
       pushToast({ msg: 'Account created successfully! Welcome aboard!', type: 'success' });
       navigate('/dashboard', { replace: true });
     } catch (err) {
-      const message = err.message?.toLowerCase().includes('email')
+      const message = err.code === 409
         ? 'This email is already registered'
         : 'Failed to create account. Please try again';
       setErrors({ form: message });
@@ -81,6 +83,29 @@ export default function Signup() {
         )}
 
         <div className="form-group">
+          <label htmlFor="name">Full Name</label>
+          <div className="input-with-icon">
+            <input
+              id="name"
+              type="text"
+              className={`with-icon-left ${errors.name ? 'error' : ''}`}
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={isLoading}
+              autoComplete="name"
+              autoFocus
+            />
+            <span className="input-icon left" aria-hidden="true">
+              <svg width="20" height="20" fill="none" strokeWidth="1.5" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+              </svg>
+            </span>
+          </div>
+          {errors.name && <span className="error-message">{errors.name}</span>}
+        </div>
+
+        <div className="form-group">
           <label htmlFor="email">Email address</label>
           <div className="input-with-icon">
             <input
@@ -92,7 +117,6 @@ export default function Signup() {
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}
               autoComplete="email"
-              autoFocus
             />
             <span className="input-icon left" aria-hidden="true">
               <EmailIcon />
