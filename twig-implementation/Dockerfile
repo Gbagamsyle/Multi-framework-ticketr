@@ -46,6 +46,11 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Copy only composer files first to leverage Docker cache and avoid copying host vendor dir
 COPY composer.json composer.lock /var/www/html/
 
+# Ensure storage directories exist before composer post-install scripts run
+RUN mkdir -p /var/www/html/storage /var/www/html/storage/cache /var/www/html/storage/logs \
+    && chown -R www-data:www-data /var/www/html/storage \
+    && chmod -R 775 /var/www/html/storage
+
 # Install dependencies (this creates the vendor directory)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
