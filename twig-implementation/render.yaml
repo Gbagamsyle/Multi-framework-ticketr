@@ -14,11 +14,11 @@ services:
         generateValue: true
       - key: DB_PATH
         value: /var/www/html/storage/users.json
-    
+
     disk:
       name: storage
       mountPath: /var/www/html/storage
       sizeGB: 1
-    
-  healthCheckPath: /
-  autoDeploy: true
+
+    healthCheckPath: /
+    autoDeploy: true
