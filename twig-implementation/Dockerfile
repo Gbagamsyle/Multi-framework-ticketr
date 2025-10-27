@@ -4,23 +4,24 @@ FROM php:8.3-apache
 # Set working directory inside container
 WORKDIR /var/www/html
 
-# Install system dependencies and PHP extensions
-RUN sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list \
-    && apt-get update \
-    && apt-get install -y \
+# Install system dependencies and PHP extensions (stable, non-interactive)
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
         git \
         unzip \
+        build-essential \
+        pkg-config \
         libicu-dev \
         libzip-dev \
         zip \
         zlib1g-dev \
         libpng-dev \
-        libjpeg-dev \
+        libjpeg62-turbo-dev \
         libfreetype6-dev \
         libonig-dev \
+        default-libmysqlclient-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-configure intl \
-    && docker-php-ext-install -j$(nproc) \
+    && docker-php-ext-install -j"$(nproc)" \
         intl \
         pdo \
         pdo_mysql \
