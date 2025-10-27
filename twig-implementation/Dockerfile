@@ -65,8 +65,24 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage
 
 # Configure Apache
-RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf \
-    && sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+RUN { \
+    echo '<VirtualHost *:80>'; \
+    echo '    DocumentRoot /var/www/html/public'; \
+    echo '    DirectoryIndex index.php'; \
+    echo '    <Directory /var/www/html/public>'; \
+    echo '        Options Indexes FollowSymLinks'; \
+    echo '        AllowOverride All'; \
+    echo '        Require all granted'; \
+    echo '    </Directory>'; \
+    echo '</VirtualHost>'; \
+} > /etc/apache2/sites-available/000-default.conf \
+&& echo 'ServerName localhost' >> /etc/apache2/apache2.conf
+
+# Create .htaccess if it doesn't exist
+RUN echo 'RewriteEngine On' > /var/www/html/public/.htaccess \
+    && echo 'RewriteCond %{REQUEST_FILENAME} !-f' >> /var/www/html/public/.htaccess \
+    && echo 'RewriteCond %{REQUEST_FILENAME} !-d' >> /var/www/html/public/.htaccess \
+    && echo 'RewriteRule ^ index.php [QSA,L]' >> /var/www/html/public/.htaccess
 
 EXPOSE 80
 
