@@ -3,21 +3,16 @@
 namespace Ogaba\TwigImplementation\Controllers;
 
 class AuthController extends BaseController {
-    private $users = [
-        [
-            'id' => 1,
-            'email' => 'test@example.com',
-            'password' => 'Password123!',
-            'name' => 'Demo User'
-        ],
-        [
-            'id' => 2,
-            'email' => 'admin',
-            'password' => 'admin123',
-            'name' => 'Admin User'
-        ]
-    ];
+    private $usersFile;
 
+    public function __construct($twig) {
+        parent::__construct($twig);
+        $this->usersFile = DIR . '/../../storage/users.json';
+    }
+
+    // ==========================
+    // Render Login Page
+    // ==========================
     public function loginPage() {
         if ($this->isAuthenticated()) {
             $this->redirect('/dashboard');
@@ -25,12 +20,24 @@ class AuthController extends BaseController {
         $this->render('auth/login.twig');
     }
 
+    // ==========================
+    // Handle Login
+    // ==========================
     public function login() {
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
+        $email = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
 
-        foreach ($this->users as $user) {
-            if ($user['email'] === $email && $user['password'] === $password) {
+        if (!$email || !$password) {
+            $this->render('auth/login.twig', [
+                'error' => 'Please fill in both email and password.'
+            ]);
+            return;
+        }
+
+        $users = $this->getUsers();
+
+        foreach ($users as $user) {
+            if ($user['email'] === $email && password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['user_email'] = $user['email'];
@@ -44,6 +51,9 @@ class AuthController extends BaseController {
         ]);
     }
 
+    // ==========================
+    // Render Signup Page
+    // ==========================
     public function signupPage() {
         if ($this->isAuthenticated()) {
             $this->redirect('/dashboard');
@@ -51,23 +61,28 @@ class AuthController extends BaseController {
         $this->render('auth/signup.twig');
     }
 
+    // ==========================
+    // Handle Signup
+    // ==========================
     public function signup() {
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-        $name = $_POST['name'] ?? '';
+        $email = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+        $name = trim($_POST['name'] ?? '');
 
-        if (!$email || !$password || !$name) {
+        if (!$email  !$password  !$name) {
             $this->render('auth/signup.twig', [
-                'error' => 'All fields are required'
+                'error' => 'All fields are required.'
             ]);
             return;
         }
 
+        $users = $this->getUsers();
+
         // Check if email already exists
-        foreach ($this->users as $user) {
+        foreach ($users as $user) {
             if ($user['email'] === $email) {
                 $this->render('auth/signup.twig', [
-                    'error' => 'Email already exists'
+                    'error' => 'Email already exists.'
                 ]);
                 return;
             }
@@ -75,23 +90,53 @@ class AuthController extends BaseController {
 
         // Create new user
         $newUser = [
-            'id' => count($this->users) + 1,
+            'id' => count($users) + 1,
             'email' => $email,
-            'password' => $password,
+            'password' => password_hash($password, PASSWORD_DEFAULT),
             'name' => $name
         ];
 
-        // In a real application, we would save this to a database
-        // For demo, we'll just log in the user
+        $users[] = $newUser;
+        $this->saveUsers($users);
+
+        // Log in user
         $_SESSION['user_id'] = $newUser['id'];
         $_SESSION['user_name'] = $newUser['name'];
         $_SESSION['user_email'] = $newUser['email'];
-        
+
         $this->redirect('/dashboard');
     }
 
+    // ==========================
+    // Logout
+    // ==========================
     public function logout() {
         session_destroy();
         $this->redirect('/');
+    }
+
+    // ==========================
+    // Helper Functions
+    // ==========================
+    private function getUsers() {
+        if (!file_exists($this->usersFile)) {
+            return [];
+        }
+
+        $json = file_get_contents($this->usersFile);
+        $users = json_decode($json, true);
+        return is_array($users) ? $users : [];
+    }
+
+    private function saveUsers($users) {
+        $dir = dirname($this->usersFile);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        file_put_contents(
+            $this->usersFile,
+            json_encode($users, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        );
     }
 }
