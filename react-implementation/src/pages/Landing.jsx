@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import DemoCredentials from '../components/DemoCredentials';
 import heroWave from '../../../shared-assets/hero-wave.svg';
 import '../styles/global.css';
 import '../styles/header.css';
@@ -45,6 +44,13 @@ export default function Landing() {
               <Link to="/auth/login" className="btn btn-secondary" aria-label="Sign in to dashboard">
                 Sign in to dashboard
               </Link>
+
+              {/* small trust badges row */}
+              <div className="trust-badges" aria-hidden="true">
+                <span className="badge">GDPR</span>
+                <span className="badge">ISO 27001</span>
+                <span className="badge">SOC 2</span>
+              </div>
             </div>
           </div>
 
@@ -88,9 +94,7 @@ export default function Landing() {
                     </div>
                   </div>
                 </div>
-                <div className="overlay-card" aria-hidden="true">
-                  <DemoCredentials />
-                </div>
+                {/* demo credentials removed for production/demo clarity */}
               </div>
             </div>
           </div>
