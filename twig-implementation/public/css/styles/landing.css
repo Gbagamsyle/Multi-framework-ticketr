@@ -9,6 +9,7 @@
   padding: 6rem 0 6rem;
   background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(99,102,241,0.04) 100%);
   overflow: visible;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS devices */
 }
 
 .hero-inner {
@@ -159,43 +160,33 @@
   font-weight: 400;
 }
 
-/* Enhanced Responsive Styles */
-@media (max-width: 1024px) {
+/* Professional Responsive Design System */
+
+/* Base Mobile Styles (320px and up) */
+@media screen and (min-width: 320px) {
+  .hero {
+    padding: 2rem 0;
+  }
+
   .hero-inner {
     flex-direction: column;
-    gap: 3rem;
+    gap: 2rem;
     text-align: center;
   }
 
   .hero-content {
     max-width: 100%;
+    padding: 0 1rem;
   }
 
   .hero-title {
-    font-size: 2.75rem;
+    font-size: 1.75rem;
+    line-height: 1.2;
   }
 
-  .feature-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero {
-    padding: 4rem 0 4rem;
-  }
-
-  .hero-title {
-    font-size: 2.25rem;
-  }
-
-  .section-header h2 {
-    font-size: 2rem;
-  }
-
-  .section-subtitle {
+  .hero-sub {
     font-size: 1rem;
+    line-height: 1.5;
   }
 
   .hero-ctas {
@@ -205,33 +196,27 @@
 
   .hero-ctas .btn {
     width: 100%;
-    justify-content: center;
-  }
-
-  .demo-card-container {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 640px) {
-  .hero {
-    padding: 3rem 0 3rem;
-  }
-
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .hero-sub {
-    font-size: 1rem;
+    padding: 0.75rem 1rem;
   }
 
   .feature-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem;
   }
 
   .section-header h2 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.875rem;
+    padding: 0 1rem;
+  }
+
+  .demo-card-container {
+    max-width: 100%;
     padding: 0 1rem;
   }
 
@@ -245,9 +230,137 @@
     left: auto;
     transform: none;
     max-width: 100%;
-    margin-top: 1.5rem;
+    margin: 1.5rem auto;
   }
 }
+
+/* Small Tablets (480px and up) */
+@media screen and (min-width: 480px) {
+  .hero {
+    padding: 3rem 0;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-sub {
+    font-size: 1.125rem;
+  }
+
+  .hero-ctas {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .hero-ctas .btn {
+    width: auto;
+    min-width: 180px;
+  }
+
+  .demo-credentials {
+    max-width: 400px;
+  }
+}
+
+/* Large Tablets (768px and up) */
+@media screen and (min-width: 768px) {
+  .hero {
+    padding: 4rem 0;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .section-header h2 {
+    font-size: 2.25rem;
+  }
+
+  .demo-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .demo-card-container {
+    padding: 0 2rem;
+  }
+}
+
+/* Small Laptops (1024px and up) */
+@media screen and (min-width: 1024px) {
+  .hero {
+    padding: 5rem 0;
+  }
+
+  .hero-inner {
+    flex-direction: row;
+    text-align: left;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .hero-content {
+    max-width: 50%;
+  }
+
+  .hero-ctas {
+    justify-content: flex-start;
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  .demo-card-container {
+    padding: 0;
+  }
+}
+
+/* Large Laptops and Desktops (1280px and up) */
+@media screen and (min-width: 1280px) {
+  .hero {
+    padding: 6rem 0;
+  }
+
+  .hero-title {
+    font-size: 3.4rem;
+  }
+
+  .hero-inner {
+    gap: 6rem;
+  }
+
+  .hero-content {
+    max-width: 640px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* 4K and Ultra-wide Screens (1920px and up) */
+@media screen and (min-width: 1920px) {
+  .container {
+    max-width: 1400px;
+  }
+
+  .hero-content {
+    max-width: 720px;
+  }
+}
+
 .feature-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:2rem; margin-top:3rem }
 .feature-card { background:var(--bg); border-radius:1rem; padding:2rem; border:1px solid var(--border-color); box-shadow:var(--shadow-md); transition:all var(--transition-base); text-align:center }
 .feature-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:var(--accent) }

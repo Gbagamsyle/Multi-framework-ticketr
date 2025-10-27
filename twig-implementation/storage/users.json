@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "email": "gbagamscott@gmail.com",
+        "password": "$2y$10$.wX9OSKgWC.RBaghWG1wVe8FpjPLId0gpiOR.hQBH77Kw1LW8M0zK",
+        "name": "Ogaba Silas"
+    },
+    {
+        "id": 2,
+        "email": "ogabasyle@gmail.com",
+        "password": "$2y$10$GGZL4UgDrzNSqV5/yIaZgO0t3MHvdv1A56Z/6Cnb9nDhPi.i9bEya",
+        "name": "rgreg"
+    }
+]
