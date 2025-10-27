@@ -1,9 +1,30 @@
 services:
   - type: web
-    name: twig-implementation
+    name: twig-ticketr
     env: php
     buildCommand: |
       apt-get update && apt-get install -y unzip zip curl git php-cli php-mbstring php-xml php-zip php-curl
       curl -sS https://getcomposer.org/installer | php
       php composer.phar install --no-interaction --no-dev --optimize-autoloader
-    startCommand: php -S 0.0.0.0:10000 -t public
+      mkdir -p storage/cache storage/logs
+      chmod -R 775 storage
+    startCommand: php -S 0.0.0.0:$PORT -t public/
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DOCUMENT_ROOT
+        value: /var/www/html/public
+      - key: APP_SECRET
+        generateValue: true
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_PATH
+        value: /var/www/html/storage/users.json
+    
+    disk:
+      name: storage
+      mountPath: /var/www/html/storage
+      sizeGB: 1
+    
+    healthCheckPath: /
+    autoDeploy: true
