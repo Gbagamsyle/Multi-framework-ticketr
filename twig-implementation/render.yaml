@@ -1,14 +1,8 @@
 services:
   - type: web
     name: twig-ticketr
-    env: php
-    buildCommand: |
-      apt-get update && apt-get install -y unzip zip curl git php-cli php-mbstring php-xml php-zip php-curl
-      curl -sS https://getcomposer.org/installer | php
-      php composer.phar install --no-interaction --no-dev --optimize-autoloader
-      mkdir -p storage/cache storage/logs
-      chmod -R 775 storage
-    startCommand: php -S 0.0.0.0:$PORT -t public/
+    env: docker
+    dockerfilePath: Dockerfile
     envVars:
       - key: APP_ENV
         value: production
@@ -26,5 +20,5 @@ services:
       mountPath: /var/www/html/storage
       sizeGB: 1
     
-    healthCheckPath: /
-    autoDeploy: true
+  healthCheckPath: /
+  autoDeploy: true
