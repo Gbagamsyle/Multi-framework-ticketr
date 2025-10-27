@@ -61,15 +61,19 @@ const logout = async () => {
 };
 
 // Computed state
-const isAuthenticated = () => {
+const isAuthenticated = computed(() => {
   return Boolean(session.value?.token && session.value?.expiresAt > Date.now());
-};
+});
+
+// Expose the logged-in user (or null)
+const user = computed(() => session.value?.user ?? null);
 
 // Provide auth context
 provide('auth', {
   session: readonly(session),
+  user: readonly(user),
   isLoading: readonly(isLoading),
-  isAuthenticated,
+  isAuthenticated: readonly(isAuthenticated),
   login,
   signup,
   logout

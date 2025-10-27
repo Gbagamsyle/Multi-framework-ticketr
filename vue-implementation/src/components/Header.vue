@@ -8,24 +8,25 @@
       </div>
 
       <!-- Mobile Menu Button -->
-      <button 
+      <button
         :class="['mobile-menu-btn', { open: menuOpen }]"
         @click="toggleMenu"
         :aria-expanded="menuOpen"
-        aria-controls="main-nav"
+        aria-controls="mobile-menu"
         aria-label="Toggle navigation menu"
       >
         <span class="sr-only">Menu</span>
         <span class="hamburger"></span>
       </button>
 
-      <nav 
-        id="main-nav" 
-        :class="['main-nav', { open: menuOpen }]"
+      <!-- Desktop nav (kept as-is) -->
+      <nav
+        id="main-nav"
+        class="main-nav"
         aria-label="Main navigation"
       >
-        <router-link 
-          v-for="route in routes" 
+        <router-link
+          v-for="route in routes"
           :key="route.path"
           :to="route.path"
           :class="{ active: currentPath === route.path }"
@@ -33,6 +34,43 @@
           {{ route.name }}
         </router-link>
       </nav>
+
+      <!-- Mobile full-screen overlay menu -->
+      <div
+        v-if="menuOpen"
+        id="mobile-menu"
+        class="mobile-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile navigation"
+      >
+        <div class="mobile-overlay-backdrop" @click="menuOpen = false" aria-hidden="true"></div>
+        <div class="mobile-overlay-panel" role="document">
+          <button class="mobile-close" @click="menuOpen = false" aria-label="Close menu">✕</button>
+          <nav class="mobile-nav">
+            <router-link
+              v-for="route in routes"
+              :key="route.path"
+              :to="route.path"
+              @click.native="menuOpen = false"
+              :class="{ active: currentPath === route.path }"
+            >
+              {{ route.name }}
+            </router-link>
+          </nav>
+
+          <div class="mobile-actions">
+            <template v-if="isAuthenticated">
+              <span class="username" :title="session?.username">{{ session?.username }}</span>
+              <button class="btn ghost" @click="handleLogout">Logout</button>
+            </template>
+            <template v-else>
+              <router-link to="/auth/login" class="btn ghost" @click.native="menuOpen = false">Login</router-link>
+              <router-link to="/auth/signup" class="btn primary" @click.native="menuOpen = false">Get Started</router-link>
+            </template>
+          </div>
+        </div>
+      </div>
 
       <div class="header-actions">
         <template v-if="isAuthenticated">

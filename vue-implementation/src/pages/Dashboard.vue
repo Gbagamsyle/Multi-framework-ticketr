@@ -54,9 +54,9 @@ onMounted(async () => {
       <!-- Header -->
       <header class="page-header">
         <div class="flex items-center gap-4">
-          <div class="avatar">{{ user?.email?.charAt(0).toUpperCase() }}</div>
+          <div class="avatar">{{ user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() }}</div>
           <div>
-            <h1 class="page-title">Welcome back, {{ user?.email }}</h1>
+            <h1 class="page-title">Welcome back, {{ user?.name || user?.email }}</h1>
             <p class="page-description">Here's an overview of your support tickets</p>
           </div>
         </div>

@@ -45,6 +45,9 @@ body {
   background: var(--bg-secondary);
 }
 
+/* Ensure main content sits below the fixed/sticky header */
+main { padding-top: var(--header-height); }
+
 /* Links */
 a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--accent-hover); }
@@ -109,6 +112,12 @@ a:hover { color: var(--accent-hover); }
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Reduce header height slightly on small screens to save vertical space */
+@media (max-width: 640px) {
+  :root { --header-height: 56px; }
+  .container { padding: 0 0.75rem; }
 }
 
 /* Small utility to disable specific animations quickly */

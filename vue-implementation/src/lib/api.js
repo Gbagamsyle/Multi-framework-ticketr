@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 const SESSION_KEY = 'ticketapp_session'
 const TICKETS_KEY = 'ticketapp_tickets'
+const USERS_KEY = 'ticketapp_users'
 
 
 function delay(ms = 300){
@@ -34,35 +35,70 @@ function requireAuthOrThrow(){
 
 export async function login({ email, password }){
   await delay(500)
-  if(email === 'test@example.com' && password === 'Password123!'){
-    const token = Math.random().toString(36).slice(2)
-    // Set expiry to 24 hours from now
-    const expiresAt = Date.now() + (24 * 60 * 60 * 1000)
-    const session = { 
-      token, 
-      username: email, 
-      expiresAt,
-      user: {
-        email,
-        name: 'Test User'
-      }
-    }
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session))
-    // Initialize empty tickets array if not exists
-    if (!localStorage.getItem(TICKETS_KEY)) {
-      localStorage.setItem(TICKETS_KEY, '[]')
-    }
-    return session
+  // Look up users from localStorage
+  const usersRaw = localStorage.getItem(USERS_KEY) || '[]'
+  let users = []
+  try { users = JSON.parse(usersRaw) } catch (e) { users = [] }
+
+  const found = users.find(u => u.email === email)
+  if (!found || found.password !== password) {
+    const err = new Error('Invalid credentials')
+    err.code = 400
+    throw err
   }
-  const err = new Error('Invalid credentials')
-  err.code = 400
-  throw err
+
+  const token = Math.random().toString(36).slice(2)
+  // Set expiry to 24 hours from now
+  const expiresAt = Date.now() + (24 * 60 * 60 * 1000)
+  const session = {
+    token,
+    username: found.email,
+    expiresAt,
+    user: {
+      email: found.email,
+      name: found.name || found.email
+    }
+  }
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+  // Initialize empty tickets array if not exists
+  if (!localStorage.getItem(TICKETS_KEY)) {
+    localStorage.setItem(TICKETS_KEY, '[]')
+  }
+  return session
 }
 
 
-export async function signup({ email, password }){
+export async function signup({ email, password, name }){
   await delay(700)
-  // For demo simply accept
+  // Basic validation
+  if (!email || !password) {
+    const err = new Error('Email and password are required')
+    err.code = 422
+    throw err
+  }
+
+  // load users
+  const usersRaw = localStorage.getItem(USERS_KEY) || '[]'
+  let users = []
+  try { users = JSON.parse(usersRaw) } catch (e) { users = [] }
+
+  if (users.find(u => u.email === email)) {
+    const err = new Error('User already exists')
+    err.code = 409
+    throw err
+  }
+
+  // create user
+  const user = {
+    id: uuidv4(),
+    email,
+    password,
+    name: name ? String(name).trim() : email.split('@')[0]
+  }
+  users.push(user)
+  localStorage.setItem(USERS_KEY, JSON.stringify(users))
+
+  // Auto-login newly created user
   return login({ email, password })
 }
 

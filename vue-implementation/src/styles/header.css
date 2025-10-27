@@ -30,10 +30,76 @@
 
 @media (max-width:768px){
   .mobile-menu-btn{display:block}
-  .main-nav{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;padding:1rem;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);flex-direction:column;align-items:stretch}
-  .main-nav.open{display:flex}
-  .main-nav a{padding:.75rem 1rem;display:block;text-align:center}
+
+  /* hide desktop nav on mobile */
+  .main-nav{display:none}
+
+  /* Full-screen mobile overlay */
+  .mobile-overlay{
+    position:fixed;
+    inset:0;
+    z-index:60;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:auto;
+  }
+
+  .mobile-overlay-backdrop{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+  }
+
+  .mobile-overlay-panel{
+    position:relative;
+    z-index:10;
+    width:92%;
+    max-width:520px;
+    background:var(--bg);
+    border-radius:12px;
+    box-shadow:0 20px 40px rgba(2,6,23,0.12);
+    padding:2rem 1.5rem;
+    display:flex;
+    flex-direction:column;
+    gap:1.5rem;
+    transform:translateY(-8px);
+    animation:mobileMenuIn .26s ease-out both;
+  }
+
+  @keyframes mobileMenuIn{
+    from{opacity:0;transform:translateY(-12px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  .mobile-close{
+    position:absolute;
+    right:12px;
+    top:12px;
+    background:transparent;
+    border:none;
+    font-size:1.25rem;
+    color:var(--text-secondary);
+    cursor:pointer;
+    padding:0.25rem;
+  }
+
+  .mobile-nav{
+    display:flex;
+    flex-direction:column;
+    gap:0.5rem;
+    align-items:stretch;
+  }
+
+  .mobile-nav a{display:block;padding:0.9rem 1rem;border-radius:8px;text-align:center;font-size:1.05rem;color:var(--text);text-decoration:none}
+  .mobile-nav a.active{background:rgba(99,102,241,0.08);color:var(--accent);font-weight:600}
+  .mobile-nav a:hover{background:rgba(99,102,241,0.05)}
+
+  .mobile-actions{display:flex;flex-direction:column;gap:0.75rem}
+  .mobile-actions .btn{width:100%;justify-content:center}
+
+  /* hide header-actions (desktop) while overlay is used */
   .header-actions{display:none}
-  .main-nav.open + .header-actions{display:flex;flex-direction:column;width:100%;gap:.5rem;padding:0 1rem 1rem;background:#fff}
-  .main-nav.open + .header-actions .btn{width:100%;justify-content:center}
 }
