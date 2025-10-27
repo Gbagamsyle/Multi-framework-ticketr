@@ -1,0 +1,17 @@
+{
+  "runtime": {
+    "php": {
+      "version": "8.2",
+      "extensions": [
+        "mbstring",
+        "json",
+        "session",
+        "zip"
+      ]
+    }
+  },
+  "env": {
+    "APP_ENV": "production",
+    "APP_DEBUG": "false"
+  }
+}
