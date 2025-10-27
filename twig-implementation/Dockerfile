@@ -43,7 +43,13 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy project files
+# Copy only composer files first to leverage Docker cache and avoid copying host vendor dir
+COPY composer.json composer.lock /var/www/html/
+
+# Install dependencies (this creates the vendor directory)
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Now copy the rest of the application (this won't overwrite vendor installed above unless vendor exists in repo)
 COPY . /var/www/html/
 
 # Set proper permissions
@@ -52,9 +58,6 @@ RUN chown -R www-data:www-data /var/www/html \
     && mkdir -p /var/www/html/storage/cache /var/www/html/storage/logs \
     && chown -R www-data:www-data /var/www/html/storage \
     && chmod -R 775 /var/www/html/storage
-
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Configure Apache
 RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf \
