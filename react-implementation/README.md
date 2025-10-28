@@ -86,9 +86,9 @@ To deploy your own version, connect your GitHub repo to Netlify
 
 Ogaba Silas
 💼 Project: Ticket Management App
-🌍 GitHub: https://github.com/YOUR-USERNAME
+🌍 GitHub: https://github.com/Gbagamsyle 
 
-📧 Email: your-email@example.com
+📧Email: gbagamscott@gmail.com 
 
 📝 License
 
