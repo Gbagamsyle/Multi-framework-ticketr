@@ -5,7 +5,7 @@ This repository houses multiple frontend implementations of a TicketApp, showcas
 ## Live Url
 * React : https://react-ticketr.netlify.app/
 * Vue : https://ticketr-vue.netlify.app/
-* Twig : https://react-ticketr.netlify.app/
+* Twig : https://multi-framework-ticketr.onrender.com/
 
   
 ## Key Features & Benefits
@@ -122,4 +122,5 @@ License not specified. All rights reserved by Gbagamsyle.
     *   uuid
     *   ESLint
     *   and their respective dependencies.
+
 
